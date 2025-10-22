@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuchubales - Sistema Inteligente</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
         * {
             margin: 0;
@@ -399,11 +401,6 @@
             border-top: 1px solid #e0e0e0;
         }
 
-        .historial-ganancia-text {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
         .historial-ganancia-valor {
             font-weight: 700;
             font-size: 18px;
@@ -578,11 +575,11 @@
                 <div class="card">
                     <div class="card-title">📊 Estadísticas</div>
                     <div class="stat-box">
-                        <span class="stat-label">Ganados/Perdidos:</span>
+                        <span class="stat-label">Victorias/Derrotas:</span>
                         <span class="stat-value" id="ganPer">0/0</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-label">Tasa de ganancia:</span>
+                        <span class="stat-label">Tasa de victoria:</span>
                         <span class="stat-value" id="tasaGan">0%</span>
                     </div>
                     <div class="stat-box">
@@ -628,11 +625,11 @@
                     </div>
 
                     <div class="input-group">
-                        <label>¿Ganaste o perdiste?</label>
+                        <label>Resultado:</label>
                         <select id="resultado">
                             <option value="">-- Selecciona --</option>
-                            <option value="ganancia">✓ Gané</option>
-                            <option value="perdida">✗ Perdí</option>
+                            <option value="victoria">✓ Victoria</option>
+                            <option value="derrota">✗ Derrota</option>
                         </select>
                     </div>
 
@@ -662,7 +659,7 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-title">🥧 Ganancias vs Pérdidas</div>
+                    <div class="card-title">🥧 Victorias vs Derrotas</div>
                     <div class="chart-container" style="height: 300px;">
                         <canvas id="piChart"></canvas>
                     </div>
@@ -687,8 +684,8 @@
                         <input type="date" id="filtroFecha" placeholder="Fecha">
                         <select id="filtroResultado">
                             <option value="">Todos</option>
-                            <option value="ganancia">✓ Ganancias</option>
-                            <option value="perdida">✗ Pérdidas</option>
+                            <option value="victoria">✓ Victorias</option>
+                            <option value="derrota">✗ Derrotas</option>
                         </select>
                         <button class="btn-small" onclick="limpiarFiltros()" style="width: auto; padding: 10px 12px;">🔄</button>
                     </div>
@@ -780,6 +777,24 @@
             return new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
 
+        function showToast(mensaje, tipo = 'success') {
+            const colores = {
+                success: '#00aa00',
+                error: '#ff3333',
+                info: '#0066cc',
+                warning: '#ffaa00'
+            };
+
+            Toastify({
+                text: mensaje,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: colores[tipo],
+                stopOnFocus: true
+            }).showToast();
+        }
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -813,7 +828,7 @@
             const resultado = document.getElementById('resultado').value;
 
             if (!aporte || !jugadores || !resultado) {
-                alert('Completa todos los campos');
+                showToast('⚠️ Completa todos los campos', 'warning');
                 return;
             }
 
@@ -825,7 +840,7 @@
                 jugadores,
                 total: aporte * jugadores,
                 resultado,
-                movimiento: resultado === 'ganancia' ? (aporte * jugadores - aporte) : -aporte
+                movimiento: resultado === 'victoria' ? (aporte * jugadores - aporte) : -aporte
             };
 
             datos.juegos.push(juego);
@@ -837,7 +852,7 @@
             document.getElementById('canasta').textContent = '$0.00';
             document.getElementById('ganancia').textContent = '$0.00';
             actualizarUI();
-            alert('✓ Cuchubal guardado');
+            showToast('✅ Cuchubal guardado exitosamente', 'success');
         }
 
         function establecerMeta() {
@@ -846,6 +861,9 @@
                 datos.meta = meta;
                 guardarDatos();
                 actualizarUI();
+                showToast(`🎯 Meta establecida en ${formatearMoneda(meta)}`, 'info');
+            } else {
+                showToast('⚠️ Ingresa una meta válida', 'warning');
             }
         }
 
@@ -854,12 +872,12 @@
             datos.juegos.forEach(j => {
                 balance += j.movimiento;
                 aportado += j.aporte;
-                if (j.resultado === 'ganancia') ganados++;
+                if (j.resultado === 'victoria') ganados++;
             });
 
             let racha = 0;
             for (let i = datos.juegos.length - 1; i >= 0; i--) {
-                if (datos.juegos[i].resultado === 'ganancia') racha++;
+                if (datos.juegos[i].resultado === 'victoria') racha++;
                 else break;
             }
 
@@ -893,10 +911,9 @@
 
             let html = '';
             [...juegos].reverse().forEach(j => {
-                const esGanancia = j.resultado === 'ganancia';
-                const colorBorde = esGanancia ? '#00aa00' : '#ff3333';
-                const colorGanancia = esGanancia ? 'ganancia-positiva' : 'ganancia-negativa';
-                const icono = esGanancia ? '✓' : '✗';
+                const esVictoria = j.resultado === 'victoria';
+                const colorBorde = esVictoria ? '#00aa00' : '#ff3333';
+                const colorGanancia = esVictoria ? 'ganancia-positiva' : 'ganancia-negativa';
                 
                 html += `<div class="historial-item" style="border-left-color: ${colorBorde};">
                     <div class="historial-header">
@@ -921,7 +938,7 @@
                     </div>
 
                     <div class="historial-ganancia">
-                        <span class="historial-ganancia-text">${icono} Resultado:</span>
+                        <span style="font-weight: 600;">${esVictoria ? '✓ Victoria' : '✗ Derrota'}:</span>
                         <span class="historial-ganancia-valor ${colorGanancia}">${j.movimiento >= 0 ? '+' : ''}${formatearMoneda(j.movimiento)}</span>
                     </div>
                 </div>`;
@@ -961,7 +978,7 @@
 
             let ganados = 0, perdidos = 0;
             datos.juegos.forEach(j => {
-                if (j.resultado === 'ganancia') ganados++;
+                if (j.resultado === 'victoria') ganados++;
                 else perdidos++;
             });
 
@@ -971,7 +988,7 @@
                 charts.pie = new Chart(ctx2.getContext('2d'), {
                     type: 'doughnut',
                     data: {
-                        labels: ['Ganados', 'Perdidos'],
+                        labels: ['Victorias', 'Derrotas'],
                         datasets: [{ data: [ganados, perdidos], backgroundColor: ['#00aa00', '#ff3333'] }]
                     },
                     options: { responsive: true, maintainAspectRatio: false }
@@ -993,10 +1010,11 @@
         }
 
         function eliminarJuego(id) {
-            if (confirm('¿Eliminar?')) {
+            if (confirm('¿Eliminar este registro?')) {
                 datos.juegos = datos.juegos.filter(j => j.id !== id);
                 guardarDatos();
                 actualizarUI();
+                showToast('🗑️ Registro eliminado', 'info');
             }
         }
 
@@ -1007,10 +1025,11 @@
         }
 
         function limpiarHistorial() {
-            if (confirm('⚠️ ¿Eliminar todo?')) {
+            if (confirm('⚠️ ¿Estás seguro de eliminar TODO el historial?')) {
                 datos.juegos = [];
                 guardarDatos();
                 actualizarUI();
+                showToast('🗑️ Historial completamente limpio', 'warning');
             }
         }
 
@@ -1025,6 +1044,7 @@
             a.href = url;
             a.download = 'cuchubales.csv';
             a.click();
+            showToast('📥 CSV descargado', 'success');
         }
 
         function exportarJSON() {
@@ -1034,6 +1054,7 @@
             a.href = url;
             a.download = 'cuchubales.json';
             a.click();
+            showToast('📥 JSON descargado', 'success');
         }
 
         function hacerBackup() {
@@ -1043,6 +1064,7 @@
             a.href = url;
             a.download = `backup-${new Date().toLocaleDateString()}.json`;
             a.click();
+            showToast('💾 Backup guardado', 'success');
         }
 
         actualizarUI();
