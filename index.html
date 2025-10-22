@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Cuchubales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 5px solid #0066cc;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .result-item.total .result-value {
+            color: #0066cc;
+            font-size: 22px;
+        }
+
+        .result-item.total {
+            background: #e6f2ff;
+            padding: 15px;
+            margin: 0 -25px -25px -25px;
+            border-radius: 0 0 12px 12px;
+            border-left: none;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #0044aa;
+            line-height: 1.5;
+        }
+
+        .currency {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .historial-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .historial-item {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .historial-fecha {
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+            background: #0066cc;
+            padding: 6px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .historial-detalles {
+            flex: 1;
+        }
+
+        .historial-info {
+            font-size: 14px;
+            color: #333;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .historial-cantidad {
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 8px;
+            color: #0066cc;
+        }
+
+        .btn-eliminar {
+            background: linear-gradient(135deg, #ff3333 0%, #ff6666 100%);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            align-self: center;
+            width: auto;
+        }
+
+        .btn-eliminar:hover {
+            background: linear-gradient(135deg, #cc0000 0%, #ff3333 100%);
+        }
+
+        .historial-vacio {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        .resumen-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #0066cc;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #0044aa;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .btn-limpiar {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #ff3333 0%, #ff6666 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-limpiar:hover {
+            background: linear-gradient(135deg, #cc0000 0%, #ff3333 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 102, 204, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 102, 204, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+        <div class="main-wrapper">
+            <!-- CALCULADORA -->
+            <div class="container">
+                <h1>🎲 Calculadora de Cuchubales</h1>
+
+                <div class="form-group">
+                    <label for="miAporte">¿Cuánto vas a aportar? <span class="currency">(en pesos)</span></label>
+                    <input type="number" id="miAporte" placeholder="Ej: 10000" min="0" step="1000">
+                </div>
+
+                <div class="form-group">
+                    <label for="numJugadores">¿Cuántas personas están jugando?</label>
+                    <input type="number" id="numJugadores" placeholder="Ej: 5" min="1" step="1">
+                </div>
+
+                <button onclick="guardarJuego()">📝 Guardar Cuchubal</button>
+
+                <div class="results">
+                    <div class="result-item">
+                        <span class="result-label">Total en la canasta:</span>
+                        <span class="result-value" id="totalCanasta">$0</span>
+                    </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Si ganas, recibes:</span>
+                        <span class="result-value" id="tuGanancia">$0</span>
+                    </div>
+
+                    <div class="result-item total">
+                        <span class="result-label">🏆 Ganancia neta:</span>
+                        <span class="result-value" id="gananciaNeta">$0</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📌 Cómo funciona:</strong><br>
+                    • Se suman los aportes de todos los jugadores<br>
+                    • Si ganas, recibes todo el dinero de la canasta<br>
+                    • Tu ganancia neta es el total menos lo que aportaste
+                </div>
+            </div>
+
+            <!-- HISTORIAL -->
+            <div class="container">
+                <h2>📅 Historial de Cuchubales</h2>
+
+                <div class="resumen-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Total Aportado</div>
+                        <div class="stat-value" id="totalAportado">$0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Cuchubales</div>
+                        <div class="stat-value" id="totalCuchubales">0</div>
+                    </div>
+                </div>
+
+                <div class="historial-container" id="historialContainer">
+                    <div class="historial-vacio">📭 Aún no hay cuchubales registrados</div>
+                </div>
+
+                <button class="btn-limpiar" onclick="limpiarHistorial()">🗑️ Limpiar Historial</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, particles = [];
+
+        function initThreeJS() {
+            const canvas = document.getElementById('canvas');
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e27);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            createMolecules();
+            animate();
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createMolecules() {
+            const moleculeCount = 60;
+            const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+            
+            for (let i = 0; i < moleculeCount; i++) {
+                const material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color().setHSL(0.58 + Math.random() * 0.1, 0.7, 0.6),
+                    emissive: new THREE.Color().setHSL(0.58 + Math.random() * 0.1, 0.7, 0.4),
+                    shininess: 100
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(
+                    (Math.random() - 0.5) * 150,
+                    (Math.random() - 0.5) * 150,
+                    (Math.random() - 0.5) * 150
+                );
+
+                mesh.velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.5,
+                    (Math.random() - 0.5) * 0.5,
+                    (Math.random() - 0.5) * 0.5
+                );
+
+                scene.add(mesh);
+                particles.push(mesh);
+            }
+
+            const light1 = new THREE.PointLight(0x0066cc, 1.5, 200);
+            light1.position.set(50, 50, 50);
+            scene.add(light1);
+
+            const light2 = new THREE.PointLight(0x0099ff, 1.5, 200);
+            light2.position.set(-50, -50, 50);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const positions = [];
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].position.add(particles[i].velocity);
+
+                if (Math.abs(particles[i].position.x) > 75) particles[i].velocity.x *= -1;
+                if (Math.abs(particles[i].position.y) > 75) particles[i].velocity.y *= -1;
+                if (Math.abs(particles[i].position.z) > 75) particles[i].velocity.z *= -1;
+
+                particles[i].rotation.x += 0.01;
+                particles[i].rotation.y += 0.01;
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const distance = particles[i].position.distanceTo(particles[j].position);
+                    if (distance < 35) {
+                        positions.push(
+                            particles[i].position.x, particles[i].position.y, particles[i].position.z,
+                            particles[j].position.x, particles[j].position.y, particles[j].position.z
+                        );
+                    }
+                }
+            }
+
+            if (positions.length > 0) {
+                if (!scene.userData.lines) {
+                    const linesMaterial = new THREE.LineBasicMaterial({ color: 0x0066cc, transparent: true, opacity: 0.3 });
+                    const linesGeometry = new THREE.BufferGeometry();
+                    const lines = new THREE.LineSegments(linesGeometry, linesMaterial);
+                    scene.add(lines);
+                    scene.userData.lines = lines;
+                }
+
+                const linesGeometry = new THREE.BufferGeometry();
+                linesGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+                scene.userData.lines.geometry = linesGeometry;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('load', initThreeJS);
+
+        const miAporte = document.getElementById('miAporte');
+        const numJugadores = document.getElementById('numJugadores');
+        const totalCanasta = document.getElementById('totalCanasta');
+        const tuGanancia = document.getElementById('tuGanancia');
+        const gananciaNeta = document.getElementById('gananciaNeta');
+        const historialContainer = document.getElementById('historialContainer');
+
+        let historial = JSON.parse(localStorage.getItem('cuchubalesHistorial')) || [];
+
+        function formatearMoneda(valor) {
+            return '$' + Math.round(valor).toLocaleString('es-ES');
+        }
+
+        function formatearFecha(fecha) {
+            const opciones = { 
+                weekday: 'short', 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            return new Date(fecha).toLocaleDateString('es-ES', opciones);
+        }
+
+        function calcular() {
+            const aporte = parseFloat(miAporte.value) || 0;
+            const jugadores = parseInt(numJugadores.value) || 0;
+
+            if (aporte <= 0 || jugadores <= 0) {
+                totalCanasta.textContent = '$0';
+                tuGanancia.textContent = '$0';
+                gananciaNeta.textContent = '$0';
+                return;
+            }
+
+            const total = aporte * jugadores;
+            const ganancia = total - aporte;
+
+            totalCanasta.textContent = formatearMoneda(total);
+            tuGanancia.textContent = formatearMoneda(total);
+            gananciaNeta.textContent = formatearMoneda(ganancia);
+        }
+
+        function guardarJuego() {
+            const aporte = parseFloat(miAporte.value);
+            const jugadores = parseInt(numJugadores.value);
+
+            if (!aporte || !jugadores) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            const total = aporte * jugadores;
+
+            const juego = {
+                id: Date.now(),
+                fecha: new Date().toISOString(),
+                aporte: aporte,
+                jugadores: jugadores,
+                total: total
+            };
+
+            historial.push(juego);
+            localStorage.setItem('cuchubalesHistorial', JSON.stringify(historial));
+
+            miAporte.value = '';
+            numJugadores.value = '';
+            calcular();
+
+            actualizarHistorial();
+            alert('✓ Cuchubal guardado exitosamente');
+        }
+
+        function actualizarHistorial() {
+            if (historial.length === 0) {
+                historialContainer.innerHTML = '<div class="historial-vacio">📭 Aún no hay cuchubales registrados</div>';
+                actualizarEstadisticas();
+                return;
+            }
+
+            let html = '';
+            for (let i = historial.length - 1; i >= 0; i--) {
+                const juego = historial[i];
+
+                html += `
+                    <div class="historial-item">
+                        <div class="historial-detalles">
+                            <div class="historial-fecha">📅 ${formatearFecha(juego.fecha)}</div>
+                            <div class="historial-info">
+                                👥 ${juego.jugadores} jugadores | 💰 ${formatearMoneda(juego.aporte)}
+                            </div>
+                            <div class="historial-cantidad">
+                                🏆 Canasta: ${formatearMoneda(juego.total)}
+                            </div>
+                        </div>
+                        <button class="btn-eliminar" onclick="eliminarJuego(${juego.id})">Eliminar</button>
+                    </div>
+                `;
+            }
+            historialContainer.innerHTML = html;
+            actualizarEstadisticas();
+        }
+
+        function eliminarJuego(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este registro?')) {
+                historial = historial.filter(j => j.id !== id);
+                localStorage.setItem('cuchubalesHistorial', JSON.stringify(historial));
+                actualizarHistorial();
+            }
+        }
+
+        function limpiarHistorial() {
+            if (confirm('⚠️ ¿Estás seguro de que quieres eliminar TODO el historial? Esta acción no se puede deshacer.')) {
+                historial = [];
+                localStorage.setItem('cuchubalesHistorial', JSON.stringify(historial));
+                actualizarHistorial();
+                alert('Historial eliminado');
+            }
+        }
+
+        function actualizarEstadisticas() {
+            let totalAportado = 0;
+
+            historial.forEach(juego => {
+                totalAportado += juego.aporte;
+            });
+
+            document.getElementById('totalAportado').textContent = formatearMoneda(totalAportado);
+            document.getElementById('totalCuchubales').textContent = historial.length;
+        }
+
+        miAporte.addEventListener('input', calcular);
+        numJugadores.addEventListener('input', calcular);
+
+        actualizarHistorial();
+    </script>
+</body>
+</html>
