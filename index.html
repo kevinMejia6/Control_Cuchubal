@@ -37,16 +37,16 @@
             display: block;
         }
 
-        /* NAVBAR MODERNO */
+        /* NAVBAR SUPERIOR LIMPIO */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, rgba(0, 102, 204, 0.95) 0%, rgba(0, 153, 255, 0.95) 100%);
+            background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
             backdrop-filter: blur(10px);
             color: white;
-            padding: 12px 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -56,31 +56,51 @@
         }
 
         body.light-mode .navbar {
-            background: linear-gradient(135deg, rgba(0, 102, 204, 0.98) 0%, rgba(0, 153, 255, 0.98) 100%);
+            background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
         }
 
         .navbar-brand {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
-            min-width: 250px;
         }
 
-        .navbar-brand span {
-            background: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 4px;
+        .navbar-spacer {
+            flex: 1;
+        }
+
+        .navbar-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-navbar {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-navbar:hover {
+            background: rgba(255,255,255,0.25);
         }
 
         .hamburger {
             display: none;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             cursor: pointer;
-            z-index: 301;
+            background: none;
+            border: none;
+            padding: 0;
         }
 
         .hamburger span {
@@ -92,7 +112,7 @@
         }
 
         .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(10px, 10px);
+            transform: rotate(45deg) translate(8px, 8px);
         }
 
         .hamburger.active span:nth-child(2) {
@@ -100,120 +120,61 @@
         }
 
         .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+            transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        .navbar-menu {
+        /* TABS HORIZONTALES */
+        .tabs-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            z-index: 250;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             display: flex;
-            gap: 5px;
-            align-items: center;
-            flex: 1;
-            justify-content: center;
+            gap: 8px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
         }
 
-        .navbar-tabs {
-            display: flex;
-            gap: 3px;
-            flex-wrap: wrap;
-            justify-content: center;
+        body.light-mode .tabs-container {
+            background: rgba(255,255,255,0.95);
         }
 
-        .navbar-tab {
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.15);
+        .tab-btn {
+            padding: 10px 16px;
+            background: #e0e0e0;
             border: none;
-            color: white;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
-            transition: all 0.3s;
             white-space: nowrap;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
 
-        .navbar-tab:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-2px);
+        .tab-btn:hover {
+            background: #d0d0d0;
         }
 
-        .navbar-tab.active {
-            background: rgba(255,255,255,0.4);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .navbar-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            min-width: 150px;
-            justify-content: flex-end;
-        }
-
-        .theme-toggle, .backup-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+        .tab-btn.active {
+            background: #0066cc;
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .theme-toggle:hover, .backup-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+            border-bottom: 3px solid #0099ff;
         }
 
         .content {
             position: fixed;
-            top: 70px;
+            top: 125px;
             left: 0;
             right: 0;
             bottom: 60px;
             overflow-y: auto;
             padding: 20px;
-        }
-
-        /* MOBILE MENU */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, rgba(0, 102, 204, 0.95) 0%, rgba(0, 153, 255, 0.95) 100%);
-            padding: 15px;
-            z-index: 250;
-            max-height: calc(100vh - 130px);
-            overflow-y: auto;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .mobile-menu-tab {
-            padding: 12px 16px;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-            width: 100%;
-            text-align: left;
-        }
-
-        .mobile-menu-tab:hover, .mobile-menu-tab.active {
-            background: rgba(255,255,255,0.3);
         }
 
         .tab-content {
@@ -242,7 +203,6 @@
 
         body.light-mode .container {
             background: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
@@ -364,10 +324,6 @@
             display: inline-block;
         }
 
-        .btn-small:hover {
-            background: #cc0000;
-        }
-
         .filter-group {
             display: flex;
             gap: 10px;
@@ -391,7 +347,7 @@
 
         .export-buttons button {
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .progress-bar {
@@ -419,7 +375,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, rgba(0, 102, 204, 0.95) 0%, rgba(0, 153, 255, 0.95) 100%);
+            background: linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
             color: white;
             text-align: center;
             padding: 12px 20px;
@@ -429,17 +385,9 @@
             z-index: 100;
         }
 
-        .footer p {
-            margin: 0;
-        }
-
-        .footer strong {
-            color: #fff;
-            font-weight: 700;
-        }
-
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -455,30 +403,18 @@
             background: rgba(0, 102, 204, 0.8);
         }
 
-        @media (max-width: 1024px) {
-            .navbar-brand {
-                min-width: 180px;
-                font-size: 18px;
-            }
-
-            .navbar-tab {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-        }
-
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .navbar {
                 height: 60px;
-                padding: 10px 15px;
+                padding: 12px 15px;
             }
 
             .navbar-brand {
-                min-width: auto;
-                font-size: 16px;
+                font-size: 18px;
             }
 
-            .navbar-brand span {
+            .navbar-buttons {
                 display: none;
             }
 
@@ -486,26 +422,29 @@
                 display: flex;
             }
 
-            .navbar-menu {
-                display: none;
+            .tabs-container {
+                top: 60px;
+                padding: 8px 10px;
+                gap: 5px;
             }
 
-            .navbar-right {
-                min-width: auto;
-                gap: 10px;
-            }
-
-            .theme-toggle, .backup-btn {
-                padding: 6px 10px;
-                font-size: 14px;
+            .tab-btn {
+                padding: 8px 12px;
+                font-size: 12px;
             }
 
             .content {
-                top: 60px;
+                top: 115px;
+                padding: 15px;
             }
 
             .main-wrapper {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .container {
+                padding: 15px;
             }
 
             .export-buttons {
@@ -528,32 +467,39 @@
         @media (max-width: 480px) {
             .navbar {
                 height: 55px;
+                padding: 10px 12px;
             }
 
             .navbar-brand {
-                font-size: 14px;
+                font-size: 16px;
             }
 
-            .navbar-right {
-                gap: 8px;
+            .tabs-container {
+                top: 55px;
+                padding: 6px 8px;
+                gap: 4px;
             }
 
-            .theme-toggle, .backup-btn {
-                padding: 5px 8px;
-                font-size: 13px;
+            .tab-btn {
+                padding: 6px 10px;
+                font-size: 11px;
             }
 
             .content {
-                top: 55px;
-                padding: 15px;
+                top: 110px;
+                padding: 10px;
             }
 
             .container {
-                padding: 15px;
+                padding: 12px;
             }
 
             h2 {
                 font-size: 16px;
+            }
+
+            .stat-value {
+                font-size: 18px;
             }
         }
     </style>
@@ -561,42 +507,34 @@
 <body>
     <canvas id="canvas"></canvas>
     
-    <!-- NAVBAR MODERNO -->
+    <!-- NAVBAR LIMPIO -->
     <nav class="navbar">
         <div class="navbar-brand">
-            🎲 <span>Cuchubales</span>
+            🎲 Cuchubales
         </div>
 
-        <div class="navbar-menu">
-            <div class="navbar-tabs">
-                <button class="navbar-tab active" onclick="switchTab('inicio')">🏠 Inicio</button>
-                <button class="navbar-tab" onclick="switchTab('jugadores')">👥 Jugadores</button>
-                <button class="navbar-tab" onclick="switchTab('estadisticas')">📊 Estadísticas</button>
-                <button class="navbar-tab" onclick="switchTab('graficos')">📈 Gráficos</button>
-                <button class="navbar-tab" onclick="switchTab('logros')">🏆 Logros</button>
-                <button class="navbar-tab" onclick="switchTab('historial')">📅 Historial</button>
-            </div>
+        <div class="navbar-spacer"></div>
+
+        <div class="navbar-buttons">
+            <button class="btn-navbar" onclick="hacerBackup()" title="Backup">💾 Backup</button>
+            <button class="btn-navbar" onclick="toggleTheme()" title="Tema">🌙 Tema</button>
         </div>
 
-        <div class="navbar-right">
-            <button class="backup-btn" onclick="hacerBackup()" title="Hacer backup">💾</button>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
-            <div class="hamburger" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+        <button class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
-    <!-- MOBILE MENU -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu-tab" onclick="switchTab('inicio'); toggleMobileMenu()">🏠 Inicio</button>
-        <button class="mobile-menu-tab" onclick="switchTab('jugadores'); toggleMobileMenu()">👥 Jugadores</button>
-        <button class="mobile-menu-tab" onclick="switchTab('estadisticas'); toggleMobileMenu()">📊 Estadísticas</button>
-        <button class="mobile-menu-tab" onclick="switchTab('graficos'); toggleMobileMenu()">📈 Gráficos</button>
-        <button class="mobile-menu-tab" onclick="switchTab('logros'); toggleMobileMenu()">🏆 Logros</button>
-        <button class="mobile-menu-tab" onclick="switchTab('historial'); toggleMobileMenu()">📅 Historial</button>
+    <!-- TABS HORIZONTALES -->
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('inicio')">🏠 Inicio</button>
+        <button class="tab-btn" onclick="switchTab('jugadores')">👥 Jugadores</button>
+        <button class="tab-btn" onclick="switchTab('estadisticas')">📊 Stats</button>
+        <button class="tab-btn" onclick="switchTab('graficos')">📈 Gráficos</button>
+        <button class="tab-btn" onclick="switchTab('logros')">🏆 Logros</button>
+        <button class="tab-btn" onclick="switchTab('historial')">📅 Historial</button>
     </div>
 
     <div class="content">
@@ -607,22 +545,22 @@
                     <h2>🎲 Nuevo Cuchubal</h2>
                     
                     <div class="form-group">
-                        <label for="nombreJuego">Nombre/Descripción:</label>
+                        <label for="nombreJuego">Descripción:</label>
                         <input type="text" id="nombreJuego" placeholder="Ej: Cuchubal en casa de Juan">
                     </div>
 
                     <div class="form-group">
-                        <label for="miAporte">Tu aporte (pesos):</label>
+                        <label for="miAporte">Aporte (pesos):</label>
                         <input type="number" id="miAporte" placeholder="10000" min="0" step="1000">
                     </div>
 
                     <div class="form-group">
-                        <label for="numJugadores">Cantidad de jugadores:</label>
+                        <label for="numJugadores">Jugadores:</label>
                         <input type="number" id="numJugadores" placeholder="5" min="1" step="1">
                     </div>
 
                     <div class="form-group">
-                        <label for="ganancia">¿Ganaste o perdiste?</label>
+                        <label for="ganancia">Resultado:</label>
                         <select id="ganancia">
                             <option value="">-- Selecciona --</option>
                             <option value="ganancia">✓ Gané</option>
@@ -634,18 +572,18 @@
 
                     <div style="margin-top: 20px;">
                         <div class="stat-card">
-                            <div class="stat-label">Total en la canasta:</div>
+                            <div class="stat-label">Canasta:</div>
                             <div class="stat-value" id="totalCanasta">$0</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-label">Tu ganancia neta:</div>
+                            <div class="stat-label">Ganancia neta:</div>
                             <div class="stat-value" id="gananciaNeta">$0</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="container">
-                    <h2>📊 Resumen General</h2>
+                    <h2>📊 Resumen</h2>
                     <div class="stat-card">
                         <div class="stat-label">Balance Total:</div>
                         <div class="stat-value" id="balanceTotal">$0</div>
@@ -655,22 +593,22 @@
                         <div class="stat-value" id="totalAportadoRes">$0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Cuchubales Jugados:</div>
+                        <div class="stat-label">Cuchubales:</div>
                         <div class="stat-value" id="cuchubalesJugados">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Ganados / Perdidos:</div>
-                        <div class="stat-value" id="ganadosPerdidos">0 / 0</div>
+                        <div class="stat-label">Ganados/Perdidos:</div>
+                        <div class="stat-value" id="ganadosPerdidos">0/0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Racha Actual:</div>
+                        <div class="stat-label">🔥 Racha:</div>
                         <div class="stat-value" id="rachaActual">0</div>
                     </div>
                     <div style="margin-top: 15px;">
-                        <div class="stat-label">Progreso hacia meta:</div>
+                        <div class="stat-label">Meta de ganancias:</div>
                         <div class="form-group">
-                            <input type="number" id="metaGanancias" placeholder="Ej: 100000" min="0">
-                            <button onclick="establecerMeta()" style="margin-top: 5px;">Establecer Meta</button>
+                            <input type="number" id="metaGanancias" placeholder="100000" min="0">
+                            <button onclick="establecerMeta()" style="margin-top: 5px;">Establecer</button>
                         </div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
@@ -686,10 +624,10 @@
                 <div class="container">
                     <h2>👥 Gestionar Jugadores</h2>
                     <div class="form-group">
-                        <label for="nombreJugador">Nombre del jugador:</label>
-                        <input type="text" id="nombreJugador" placeholder="Ej: Juan">
+                        <label for="nombreJugador">Nombre:</label>
+                        <input type="text" id="nombreJugador" placeholder="Juan">
                     </div>
-                    <button onclick="agregarJugador()">➕ Agregar Jugador</button>
+                    <button onclick="agregarJugador()">➕ Agregar</button>
                     <div id="listaJugadores" style="margin-top: 20px;"></div>
                 </div>
 
@@ -704,9 +642,9 @@
         <div id="estadisticas" class="tab-content">
             <div class="main-wrapper">
                 <div class="container">
-                    <h2>📊 Estadísticas Avanzadas</h2>
+                    <h2>📊 Estadísticas</h2>
                     <div class="stat-card">
-                        <div class="stat-label">Promedio de aporte:</div>
+                        <div class="stat-label">Promedio aporte:</div>
                         <div class="stat-value" id="promedioAporte">$0</div>
                     </div>
                     <div class="stat-card">
@@ -718,11 +656,11 @@
                         <div class="stat-value" id="mayorPerdida">$0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">ROI (Retorno):</div>
+                        <div class="stat-label">ROI:</div>
                         <div class="stat-value" id="roi">0%</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Tasa de ganancia:</div>
+                        <div class="stat-label">Tasa ganancia:</div>
                         <div class="stat-value" id="tasaGanancia">0%</div>
                     </div>
                     <div class="stat-card">
@@ -732,22 +670,22 @@
                 </div>
 
                 <div class="container">
-                    <h2>🎯 Análisis Temporales</h2>
+                    <h2>🎯 Análisis</h2>
                     <div class="form-group">
-                        <label>Filtrar por:</label>
+                        <label>Filtro:</label>
                         <select id="filtroTiempo" onchange="actualizarEstadisticas()">
-                            <option value="todos">Todos los tiempos</option>
+                            <option value="todos">Todos</option>
                             <option value="hoy">Hoy</option>
-                            <option value="semana">Esta semana</option>
-                            <option value="mes">Este mes</option>
+                            <option value="semana">Semana</option>
+                            <option value="mes">Mes</option>
                         </select>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Balance en periodo:</div>
+                        <div class="stat-label">Balance:</div>
                         <div class="stat-value" id="balancePeriodo">$0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Juegos en periodo:</div>
+                        <div class="stat-label">Juegos:</div>
                         <div class="stat-value" id="juegosPeriodo">0</div>
                     </div>
                 </div>
@@ -758,7 +696,7 @@
         <div id="graficos" class="tab-content">
             <div class="main-wrapper">
                 <div class="container" style="grid-column: 1 / -1;">
-                    <h2>📈 Gráfico de Balance</h2>
+                    <h2>📈 Balance Acumulado</h2>
                     <div class="chart-container">
                         <canvas id="balanceChart"></canvas>
                     </div>
@@ -770,7 +708,7 @@
                     </div>
                 </div>
                 <div class="container">
-                    <h2>📊 Distribución de Apuestas</h2>
+                    <h2>📊 Apuestas</h2>
                     <div class="chart-container">
                         <canvas id="apuestasChart"></canvas>
                     </div>
@@ -782,7 +720,7 @@
         <div id="logros" class="tab-content">
             <div class="main-wrapper">
                 <div class="container" style="grid-column: 1 / -1;">
-                    <h2>🏆 Tus Logros y Medallas</h2>
+                    <h2>🏆 Logros y Medallas</h2>
                     <div id="logrosContainer" style="display: flex; flex-wrap: wrap; gap: 15px;"></div>
                 </div>
             </div>
@@ -792,15 +730,15 @@
         <div id="historial" class="tab-content">
             <div class="main-wrapper">
                 <div class="container" style="grid-column: 1 / -1;">
-                    <h2>📅 Historial Completo</h2>
+                    <h2>📅 Historial</h2>
                     <div class="filter-group">
                         <input type="date" id="filtroFecha">
                         <select id="filtroResultado">
                             <option value="">Todos</option>
-                            <option value="ganancia">Solo Ganancias</option>
-                            <option value="perdida">Solo Pérdidas</option>
+                            <option value="ganancia">Ganancias</option>
+                            <option value="perdida">Pérdidas</option>
                         </select>
-                        <button onclick="limpiarFiltros()" style="flex: 0.5;">🔄 Limpiar</button>
+                        <button onclick="limpiarFiltros()" style="flex: 0 0 auto; width: auto;">🔄</button>
                     </div>
                     <div class="export-buttons">
                         <button onclick="exportarCSV()">📥 CSV</button>
@@ -808,7 +746,7 @@
                         <button onclick="imprimirHistorial()">🖨️ Imprimir</button>
                     </div>
                     <div id="historialContainer"></div>
-                    <button onclick="limpiarHistorial()" style="background: #ff3333; margin-top: 20px;">🗑️ Limpiar Historial</button>
+                    <button onclick="limpiarHistorial()" style="background: #ff3333; margin-top: 20px;">🗑️ Limpiar</button>
                 </div>
             </div>
         </div>
@@ -820,7 +758,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // ===== THREE.JS MOLECULES =====
         let scene, camera, renderer, particles = [];
 
         function initThreeJS() {
@@ -900,15 +837,11 @@
 
         window.addEventListener('load', initThreeJS);
 
-        // ===== MOBILE MENU =====
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
             const hamburger = document.querySelector('.hamburger');
-            menu.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
 
-        // ===== SISTEMA COMPLETO =====
         let datos = JSON.parse(localStorage.getItem('cuchubalesCompleto')) || { juegos: [], jugadores: [], meta: 0 };
         let charts = {};
 
@@ -926,24 +859,15 @@
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.navbar-tab').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.mobile-menu-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tab).classList.add('active');
-            
-            const btn = Array.from(document.querySelectorAll('.navbar-tab')).find(b => b.textContent.includes(tab === 'inicio' ? '🏠' : tab === 'jugadores' ? '👥' : tab === 'estadisticas' ? '📊' : tab === 'graficos' ? '📈' : tab === 'logros' ? '🏆' : '📅'));
-            if (btn) btn.classList.add('active');
-            
-            const mbtn = Array.from(document.querySelectorAll('.mobile-menu-tab')).find(b => b.textContent.includes(tab === 'inicio' ? '🏠' : tab === 'jugadores' ? '👥' : tab === 'estadisticas' ? '📊' : tab === 'graficos' ? '📈' : tab === 'logros' ? '🏆' : '📅'));
-            if (mbtn) mbtn.classList.add('active');
-            
+            event.target.classList.add('active');
             if (tab === 'graficos') setTimeout(actualizarGraficos, 100);
             actualizarUI();
         }
 
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
-            const btn = document.querySelector('.theme-toggle');
-            btn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         }
 
@@ -1025,7 +949,7 @@
         }
 
         function actualizarResumen() {
-            let balance = 0, aportado = 0, ganados = 0, perdidos = 0, racha = 0;
+            let balance = 0, aportado = 0, ganados = 0, perdidos = 0;
             datos.juegos.forEach(j => {
                 balance += j.movimiento;
                 aportado += j.aporte;
@@ -1042,7 +966,7 @@
             document.getElementById('balanceTotal').textContent = formatearMoneda(balance);
             document.getElementById('totalAportadoRes').textContent = formatearMoneda(aportado);
             document.getElementById('cuchubalesJugados').textContent = datos.juegos.length;
-            document.getElementById('ganadosPerdidos').textContent = `${ganados} / ${perdidos}`;
+            document.getElementById('ganadosPerdidos').textContent = `${ganados}/${perdidos}`;
             document.getElementById('rachaActual').textContent = rachaActual + ' 🔥';
 
             const aporte = parseFloat(document.getElementById('miAporte').value) || 0;
@@ -1064,11 +988,11 @@
             datos.jugadores.forEach(j => {
                 html += `<div class="player-item">
                     <div><div style="font-weight:600;color:#333">${j.nombre}</div>
-                    <div style="font-size:12px;color:#666">Juegos: ${j.juegos} | Ganancias: ${formatearMoneda(j.ganancias)}</div></div>
-                    <button class="btn-small" onclick="eliminarJugador('${j.nombre}')">Eliminar</button>
+                    <div style="font-size:12px;color:#666">J: ${j.juegos} | G: ${formatearMoneda(j.ganancias)}</div></div>
+                    <button class="btn-small" onclick="eliminarJugador('${j.nombre}')">X</button>
                 </div>`;
             });
-            document.getElementById('listaJugadores').innerHTML = html || '<p style="text-align:center;color:#999;">No hay jugadores registrados</p>';
+            document.getElementById('listaJugadores').innerHTML = html || '<p style="text-align:center;color:#999;">Sin jugadores</p>';
 
             let topHtml = '';
             let top = [...datos.jugadores].sort((a, b) => b.ganancias - a.ganancias).slice(0, 5);
@@ -1152,8 +1076,8 @@
                 const color = j.resultado === 'ganancia' ? '#0066cc' : '#ff3333';
                 html += `<div class="historial-item" style="border-left-color: ${color}">
                     <div style="font-weight:600;color:#0066cc">📅 ${formatearFecha(j.fecha)} - ${j.nombre}</div>
-                    <div style="font-size:12px;color:#666;margin-top:5px">${icono} ${j.jugadores} jugadores | Aporte: ${formatearMoneda(j.aporte)} | Canasta: ${formatearMoneda(j.total)} | Movimiento: <strong style="color:${color}">${j.movimiento >= 0 ? '+' : ''}${formatearMoneda(j.movimiento)}</strong></div>
-                    <button class="btn-small" onclick="eliminarJuego(${j.id})" style="margin-top:5px;">Eliminar</button>
+                    <div style="font-size:12px;color:#666;margin-top:5px">${icono} ${j.jugadores} J | Aporte: ${formatearMoneda(j.aporte)} | Canasta: ${formatearMoneda(j.total)} | <strong style="color:${color}">${j.movimiento >= 0 ? '+' : ''}${formatearMoneda(j.movimiento)}</strong></div>
+                    <button class="btn-small" onclick="eliminarJuego(${j.id})" style="margin-top:5px;">X</button>
                 </div>`;
             });
             const container = document.getElementById('historialContainer');
@@ -1180,7 +1104,7 @@
                     data: {
                         labels,
                         datasets: [{
-                            label: 'Balance Acumulado',
+                            label: 'Balance',
                             data: datos_balance,
                             borderColor: '#0066cc',
                             backgroundColor: 'rgba(0, 102, 204, 0.1)',
@@ -1251,21 +1175,21 @@
             });
             rachaMax = Math.max(rachaMax, rachaActual);
 
-            if (datos.juegos.length >= 1) logros.push({ nombre: 'Primer paso', emoji: '👣', desc: 'Juega tu primer cuchubal' });
-            if (datos.juegos.length >= 10) logros.push({ nombre: 'Jugador frecuente', emoji: '🎮', desc: '10 cuchubales' });
-            if (datos.juegos.length >= 50) logros.push({ nombre: 'Experto', emoji: '⭐', desc: '50 cuchubales' });
-            if (ganadosPerdidos.ganados >= 3) logros.push({ nombre: 'Racha ganadora', emoji: '🔥', desc: '3 ganancias' });
-            if (rachaMax >= 5) logros.push({ nombre: 'Incombustible', emoji: '💪', desc: '5 victorias seguidas' });
+            if (datos.juegos.length >= 1) logros.push({ nombre: 'Primer paso', emoji: '👣' });
+            if (datos.juegos.length >= 10) logros.push({ nombre: 'Frecuente', emoji: '🎮' });
+            if (datos.juegos.length >= 50) logros.push({ nombre: 'Experto', emoji: '⭐' });
+            if (ganadosPerdidos.ganados >= 3) logros.push({ nombre: 'Ganador', emoji: '🔥' });
+            if (rachaMax >= 5) logros.push({ nombre: 'Incombustible', emoji: '💪' });
 
             const balance = datos.juegos.reduce((acc, j) => acc + j.movimiento, 0);
-            if (balance > 0) logros.push({ nombre: 'En positivo', emoji: '💰', desc: 'Balance > 0' });
-            if (balance > 100000) logros.push({ nombre: 'Millonario', emoji: '🤑', desc: 'Balance > 100k' });
+            if (balance > 0) logros.push({ nombre: 'En positivo', emoji: '💰' });
+            if (balance > 100000) logros.push({ nombre: 'Millonario', emoji: '🤑' });
 
             let html = '';
             logros.forEach(l => {
                 html += `<div class="badge">${l.emoji} ${l.nombre}</div>`;
             });
-            document.getElementById('logrosContainer').innerHTML = html || '<p style="text-align:center;color:#999;">Sin logros aún. ¡Sigue jugando!</p>';
+            document.getElementById('logrosContainer').innerHTML = html || '<p style="text-align:center;color:#999;">Sin logros aún</p>';
         }
 
         function eliminarJugador(nombre) {
@@ -1283,7 +1207,7 @@
         }
 
         function limpiarHistorial() {
-            if (confirm('⚠️ ¿Eliminar TODO el historial?')) {
+            if (confirm('⚠️ ¿Eliminar TODO?')) {
                 datos.juegos = [];
                 guardarDatos();
                 actualizarUI();
@@ -1347,7 +1271,6 @@
 
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
-            document.querySelector('.theme-toggle').textContent = '☀️';
         }
 
         actualizarUI();
